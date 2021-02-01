@@ -25,14 +25,30 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
 	@Override
 	public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
-		// TODO Auto-generated method stub
-		super.configure(security);
+		security.tokenKeyAccess("permiteAll()")
+		.checkTokenAccess("isAuthenticated");
 	}
 
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-		// TODO Auto-generated method stub
-		super.configure(clients);
+		
+		//con el and() se configura dos o más clientes
+		
+		clients
+		.inMemory()
+		.withClient("front_app")
+		.secret(passwordEncoder.encode("front1234"))
+		.scopes("read","write")
+		.authorizedGrantTypes("password","refresh_token")
+		.accessTokenValiditySeconds(3600)
+		.refreshTokenValiditySeconds(3600)
+		.and()
+		.withClient("front_app_2")
+		.secret(passwordEncoder.encode("front1234"))
+		.scopes("read","write")
+		.authorizedGrantTypes("password","refresh_token")
+		.accessTokenValiditySeconds(3600)
+		.refreshTokenValiditySeconds(3600);
 	}
 
 	@Override
